@@ -48,3 +48,4 @@ C:\Projects\cursach\DynemicEquipmentSystem\DynamicEquipmentSystem\obj\Debug\netc
 C:\Projects\cursach\DynemicEquipmentSystem\DynamicEquipmentSystem\obj\Debug\netcoreapp2.1\DynamicEquipmentSystem.dll
 C:\Projects\cursach\DynemicEquipmentSystem\DynamicEquipmentSystem\obj\Debug\netcoreapp2.1\DynamicEquipmentSystem.pdb
 C:\Projects\cursach\DynemicEquipmentSystem\DynamicEquipmentSystem\obj\Debug\netcoreapp2.1\DynamicEquipmentSystem.csproj.CopyComplete
+C:\Projects\cursach\DynemicEquipmentSystem\DynamicEquipmentSystem\obj\Debug\netcoreapp2.1\Razor\Views\Users\ChangePassword.g.cshtml.cs
