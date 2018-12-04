@@ -67,7 +67,7 @@ using DynamicEquipmentSystem.Models;
             WriteLiteral("\r\n");
             EndContext();
             BeginContext(110, 48, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "b72f8534ecd843e1b0431062d345e546", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "a3572866028740728c2b7444b1baeb58", async() => {
                 BeginContext(133, 21, true);
                 WriteLiteral("Добавить пользователя");
                 EndContext();
@@ -118,12 +118,12 @@ using DynamicEquipmentSystem.Models;
             WriteLiteral("</td>\r\n            <td>\r\n                ");
             EndContext();
             BeginContext(391, 463, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "76e21fe7a89a436bb542201b50eaa367", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "04a56f96edd048889099eb34cb8eb590", async() => {
                 BeginContext(455, 22, true);
                 WriteLiteral("\r\n                    ");
                 EndContext();
                 BeginContext(477, 88, false);
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "c0d82b3e87c24063a32b4a6dc2e68d6c", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "0f9763e5a7e348c18969418325c09898", async() => {
                     BeginContext(553, 8, true);
                     WriteLiteral("Изменить");
                     EndContext();
@@ -159,7 +159,7 @@ using DynamicEquipmentSystem.Models;
                 WriteLiteral("\r\n                    ");
                 EndContext();
                 BeginContext(587, 104, false);
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "09118c025843411aa59fd8e1c7f305f9", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "258ef3b1fa2d40ebbe62b8a830948d3e", async() => {
                     BeginContext(673, 14, true);
                     WriteLiteral("Сменить пароль");
                     EndContext();
