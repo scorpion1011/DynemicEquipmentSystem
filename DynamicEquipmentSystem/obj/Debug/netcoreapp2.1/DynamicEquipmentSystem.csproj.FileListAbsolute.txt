@@ -50,3 +50,7 @@ C:\Projects\cursach\DynemicEquipmentSystem\DynamicEquipmentSystem\obj\Debug\netc
 C:\Projects\cursach\DynemicEquipmentSystem\DynamicEquipmentSystem\obj\Debug\netcoreapp2.1\DynamicEquipmentSystem.csproj.CopyComplete
 C:\Projects\cursach\DynemicEquipmentSystem\DynamicEquipmentSystem\obj\Debug\netcoreapp2.1\Razor\Views\Users\ChangePassword.g.cshtml.cs
 C:\Projects\cursach\DynemicEquipmentSystem\DynamicEquipmentSystem\obj\Debug\netcoreapp2.1\Razor\Views\Account\Login.g.cshtml.cs
+C:\Projects\cursach\DynemicEquipmentSystem\DynamicEquipmentSystem\obj\Debug\netcoreapp2.1\Razor\Views\Friend\AddFriend.g.cshtml.cs
+C:\Projects\cursach\DynemicEquipmentSystem\DynamicEquipmentSystem\obj\Debug\netcoreapp2.1\Razor\Views\Friend\Index.g.cshtml.cs
+C:\Projects\cursach\DynemicEquipmentSystem\DynamicEquipmentSystem\obj\Debug\netcoreapp2.1\Razor\Views\Friend\Requests.g.cshtml.cs
+C:\Projects\cursach\DynemicEquipmentSystem\DynamicEquipmentSystem\obj\Debug\netcoreapp2.1\Razor\Views\Home\Friends.g.cshtml.cs
