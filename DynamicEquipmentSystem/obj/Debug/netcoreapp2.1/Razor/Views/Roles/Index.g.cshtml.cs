@@ -78,7 +78,7 @@ using DynamicEquipmentSystem.Models;
             WriteLiteral("</td>\r\n            <td>\r\n                ");
             EndContext();
             BeginContext(234, 227, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "d73a5cb23d45460fbe93a8cffb634599", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "f48445808f2444028e7c706dd6f1eb8f", async() => {
                 BeginContext(298, 156, true);
                 WriteLiteral("\r\n                    <button type=\"submit\" class=\"btn btn-sm btn-danger\">\r\n                        Удалить\r\n                    </button>\r\n                ");
                 EndContext();
@@ -125,7 +125,7 @@ using DynamicEquipmentSystem.Models;
             WriteLiteral("</table>\r\n");
             EndContext();
             BeginContext(514, 40, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "ea08b5589f0b4eeeaf0896d46cbd7415", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "379d38044a094c07ae4f1f6ae048a0c4", async() => {
                 BeginContext(537, 13, true);
                 WriteLiteral("Добавить роль");
                 EndContext();
@@ -147,7 +147,7 @@ using DynamicEquipmentSystem.Models;
             WriteLiteral("\r\n");
             EndContext();
             BeginContext(556, 49, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "d926890256064a41b18ddc85530fad85", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "833e87bf0a2643b5b09e0f840063006a", async() => {
                 BeginContext(581, 20, true);
                 WriteLiteral("Список пользователей");
                 EndContext();
