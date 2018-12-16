@@ -22,6 +22,7 @@ namespace DynamicEquipmentSystem
         {
             services.AddDbContext<ApplicationContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            
 
             services.AddIdentity<User, IdentityRole>(opts => {
                 opts.Password.RequiredLength = 5;   // минимальная длина
@@ -31,6 +32,7 @@ namespace DynamicEquipmentSystem
                 opts.Password.RequireDigit = false; // требуются ли цифры
             })
             .AddEntityFrameworkStores<ApplicationContext>()
+
             .AddDefaultTokenProviders();
 
             services.AddMvc();

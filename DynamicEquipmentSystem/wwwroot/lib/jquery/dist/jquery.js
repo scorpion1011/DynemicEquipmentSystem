@@ -1796,7 +1796,7 @@ Expr = Sizzle.selectors = {
 
 							// Seek `elem` from a previously-cached index
 
-							// ...in a gzip-friendly way
+							// ...in a gzip-Friendly way
 							node = parent;
 							outerCache = node[ expando ] || (node[ expando ] = {});
 
@@ -1825,7 +1825,7 @@ Expr = Sizzle.selectors = {
 						} else {
 							// Use previously-cached element index if available
 							if ( useCache ) {
-								// ...in a gzip-friendly way
+								// ...in a gzip-Friendly way
 								node = elem;
 								outerCache = node[ expando ] || (node[ expando ] = {});
 
