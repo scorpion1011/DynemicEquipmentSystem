@@ -2,7 +2,11 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Runtime.Serialization.Json;
+using System.Text;
 using System.Threading.Tasks;
 using DynamicEquipmentSystem.Models;
 using DynamicEquipmentSystem.ViewModels;
@@ -10,7 +14,10 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Protocols;
+using Newtonsoft.Json;
 
 namespace DynamicEquipmentSystem.Controllers
 {
@@ -18,10 +25,12 @@ namespace DynamicEquipmentSystem.Controllers
     {
 
         UserManager<User> _userManager;
+        IConfiguration _configuration;
 
-        public FriendController(UserManager<User> userManager)
+        public FriendController(IConfiguration configuration, UserManager<User> userManager)
         {
             _userManager = userManager;
+            _configuration = configuration;
         }
 
         private Task<User> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
@@ -30,31 +39,22 @@ namespace DynamicEquipmentSystem.Controllers
         {
             var user = await GetCurrentUserAsync();
             var userId = user?.Id;
-            var FriendList = new List<User>();
+            var friendList = new List<User>();
 
-            string connectionString = "Server=DESKTOP-AQQLHQR\\SQLEXPRESS;Database=DynamicEquipmentSystem;Trusted_Connection=True;MultipleActiveResultSets=true";
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            WebRequest request = WebRequest.Create(_configuration.GetValue<string>("BackendUrl") + "api/friends/" + userId);
+            request.Method = "Get";
+
+            using (var s = request.GetResponse().GetResponseStream())
             {
-                var commandText = "select u.Id from AspNetUsers as u, AspNetFriend as f where f.IdSender = @sender and f.IdReceiver = u.Id and IsAccepted = '1'";
-                using (SqlCommand command = new SqlCommand(commandText))
+                using (var sr = new StreamReader(s))
                 {
-                    command.Connection = connection;
-                    command.Parameters.Add("@sender", SqlDbType.VarChar, 100).Value = userId;
-                    connection.Open();
-
-                    using (SqlDataReader reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            FriendList.Add(await _userManager.FindByIdAsync(reader.GetString(0)));
-                        }
-                    }
-
-                    connection.Close();
+                    var contributorsAsJson = sr.ReadToEnd();
+                    friendList = JsonConvert.DeserializeObject<List<User>>(contributorsAsJson);
                 }
             }
 
-            return FriendList;
+
+            return friendList;
         }
         
         public async Task<IActionResult> Index() => View(await GetFriendsListAsync());

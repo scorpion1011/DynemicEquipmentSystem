@@ -101,11 +101,12 @@ namespace DeviceEmulator
 			WebRequest request = WebRequest.Create(ConfigurationManager.AppSettings[operation == "DELETE" ? "lostmarkUrl" : "foundmarkUrl"]);
 			request.Method = operation;
 			byte[] dataStream = Encoding.UTF8.GetBytes(String.Format("station={0}&mark={1}", stationId, markId));
-			Stream newStream = request.GetRequestStream();
+            #region "http post data"
+            Stream newStream = request.GetRequestStream();
 			newStream.Write(dataStream, 0, dataStream.Length);
 			newStream.Close();
-
-			HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            #endregion
+            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 		}
 	}
 }
