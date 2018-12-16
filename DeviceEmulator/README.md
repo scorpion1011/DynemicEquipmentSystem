@@ -1,0 +1,1 @@
+Console application that emulates work of IOT devices
