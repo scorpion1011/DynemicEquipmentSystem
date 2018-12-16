@@ -1,3 +1,9 @@
 /DeviceEmulator/DeviceEmulator/bin
 /DeviceEmulator/DeviceEmulator/obj
 /DeviceEmulator/.vs/DeviceEmulator/v14/.suo
+/.vs
+/WebsiteBackend/BackendEquipmentSystem/bin
+/WebsiteBackend/BackendEquipmentSystem/*.user
+/WebsiteBackend/BackendEquipmentSystem/obj
+/WebsiteBackend/DynamicEquipmentSystem/bin
+/WebsiteBackend/DynamicEquipmentSystem/obj
