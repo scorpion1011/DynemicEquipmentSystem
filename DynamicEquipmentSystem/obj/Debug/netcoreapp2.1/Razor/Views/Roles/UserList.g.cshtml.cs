@@ -74,7 +74,7 @@ using DynamicEquipmentSystem.Models;
             WriteLiteral("</td>\r\n            <td>\r\n                ");
             EndContext();
             BeginContext(235, 97, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "95bb024b728a4571adb9ae179f078165", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "2f2a4dce25574c76a5378daf5d67ee82", async() => {
                 BeginContext(315, 13, true);
                 WriteLiteral("Права доступа");
                 EndContext();
