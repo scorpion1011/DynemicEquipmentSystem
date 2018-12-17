@@ -30,7 +30,7 @@ namespace BackendEquipmentSystem.Controllers
 
             using (SqlConnection connection = new SqlConnection(connString))
             {
-                var commandText = "select u.Id, u.Email, u.Year from AspNetUsers as u, AspNetFriend as f where f.IdSender = @sender and f.IdReceiver = u.Id and IsAccepted = '1'";
+                var commandText = "select distinct u.Id, u.Email, u.Year, f.IsAccepted from AspNetUsers as u, AspNetFriend as f where f.IdSender = @sender and f.IdReceiver = u.Id";
                 using (SqlCommand command = new SqlCommand(commandText))
                 {
                     command.Connection = connection;
@@ -45,7 +45,8 @@ namespace BackendEquipmentSystem.Controllers
                             {
                                 id = reader.GetString(0),
                                 email = reader.GetString(1),
-                                year = reader.GetInt32(2)
+                                year = reader.GetInt32(2),
+                                isFriend = reader.GetBoolean(3)
                             });
                         }
                     }
@@ -58,7 +59,7 @@ namespace BackendEquipmentSystem.Controllers
         }
 
         [HttpPost("{senderId}/{recieverId}")]
-        public string AddFriend(string senderId, string recieverId)
+        public void AddFriend(string senderId, string recieverId)
         {
             using (SqlConnection connection = new SqlConnection(connString))
             {
@@ -73,7 +74,6 @@ namespace BackendEquipmentSystem.Controllers
                     connection.Close();
                 }
             }
-            return "nice";
         }
     }
 }

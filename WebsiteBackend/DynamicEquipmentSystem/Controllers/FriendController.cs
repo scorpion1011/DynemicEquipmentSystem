@@ -35,11 +35,11 @@ namespace DynamicEquipmentSystem.Controllers
 
         private Task<User> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
-        private async Task <List<User>> GetFriendsListAsync()
+        private async Task<List<Friend>> GetFriendsListAsync()
         {
             var user = await GetCurrentUserAsync();
             var userId = user?.Id;
-            var friendList = new List<User>();
+            var friendList = new List<Friend>();
 
             WebRequest request = WebRequest.Create(_configuration.GetValue<string>("BackendUrl") + "api/friends/" + userId);
             request.Method = "Get";
@@ -49,14 +49,14 @@ namespace DynamicEquipmentSystem.Controllers
                 using (var sr = new StreamReader(s))
                 {
                     var contributorsAsJson = sr.ReadToEnd();
-                    friendList = JsonConvert.DeserializeObject<List<User>>(contributorsAsJson);
+                    friendList = JsonConvert.DeserializeObject<List<Friend>>(contributorsAsJson);
                 }
             }
 
 
             return friendList;
         }
-        
+
         public async Task<IActionResult> Index() => View(await GetFriendsListAsync());
 
         public IActionResult AddFriend() => View();
@@ -72,20 +72,10 @@ namespace DynamicEquipmentSystem.Controllers
                     var user = await GetCurrentUserAsync();
                     var userId = user?.Id;
 
-                    string connectionString = "Server=DESKTOP-AQQLHQR\\SQLEXPRESS;Database=DynamicEquipmentSystem;Trusted_Connection=True;MultipleActiveResultSets=true";
-                    using (SqlConnection connection = new SqlConnection(connectionString))
-                    {
-                        var commandText = "INSERT INTO AspNetFriend (IdSender, IdReceiver, IsAccepted) VALUES (@sender, @reciever, 0)";
-                        using (SqlCommand command = new SqlCommand(commandText))
-                        {
-                            command.Connection = connection;
-                            command.Parameters.Add("@sender", SqlDbType.VarChar, 100).Value = userId;
-                            command.Parameters.Add("@reciever", SqlDbType.VarChar, 100).Value = result.Id;
-                            connection.Open();
-                            command.ExecuteNonQuery();
-                            connection.Close();
-                        }
-                    }
+                    WebRequest request = WebRequest.Create(_configuration.GetValue<string>("BackendUrl") + "api/friends/" + userId + "/" + result.Id);
+                    request.Method = "Post";
+                    request.GetResponse();
+
                     return RedirectToAction("Index");
                 }
                 else
@@ -94,9 +84,6 @@ namespace DynamicEquipmentSystem.Controllers
                 }
             }
             return View(model);
-
         }
-
-
     }
 }
