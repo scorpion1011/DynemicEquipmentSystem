@@ -6,6 +6,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Configuration;
+using System.Web.Script.Serialization;
 
 namespace DeviceEmulator
 {
@@ -98,15 +99,21 @@ namespace DeviceEmulator
 
 		private static void RequestServer(string operation, string stationId, string markId)
 		{
-			WebRequest request = WebRequest.Create(ConfigurationManager.AppSettings[operation == "DELETE" ? "lostmarkUrl" : "foundmarkUrl"]);
-			request.Method = operation;
-			byte[] dataStream = Encoding.UTF8.GetBytes(String.Format("station={0}&mark={1}", stationId, markId));
-            #region "http post data"
-            Stream newStream = request.GetRequestStream();
-			newStream.Write(dataStream, 0, dataStream.Length);
-			newStream.Close();
-            #endregion
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+			WebRequest request  = WebRequest.Create(ConfigurationManager.AppSettings[operation == "DELETE" ? "lostmarkUrl" : "foundmarkUrl"]);
+			request.Method      = operation;
+			request.ContentType = "application/json";
+
+			using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+			{
+				streamWriter.Write(new JavaScriptSerializer().Serialize(new {
+					station = stationId,
+					mark = markId
+				}));
+				streamWriter.Flush();
+				streamWriter.Close();
+			}
+
+			request.GetResponse();
 		}
 	}
 }
