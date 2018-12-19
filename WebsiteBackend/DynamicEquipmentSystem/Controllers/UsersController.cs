@@ -4,19 +4,26 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using DynamicEquipmentSystem.Models;
 using DynamicEquipmentSystem.ViewModels;
+using System.Data.SqlClient;
+using System.Data;
+using Microsoft.Extensions.Configuration;
+using System;
 
 namespace DynamicEquipmentSystem.Controllers
 {
     public class UsersController : Controller
     {
         UserManager<User> _userManager;
+        string connString;
 
-        public UsersController(UserManager<User> userManager)
+        public UsersController(UserManager<User> userManager, IConfiguration configuration)
         {
             _userManager = userManager;
+            connString = configuration.GetConnectionString("DynamicEquipmentSystemDatabase");
         }
 
         public IActionResult Index() => View(_userManager.Users.ToList());
+
 
         public IActionResult Create() => View();
 
@@ -29,6 +36,19 @@ namespace DynamicEquipmentSystem.Controllers
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    using (SqlConnection connection = new SqlConnection(connString))
+                    {
+                        var commandText = "INSERT INTO Station (IdStation, IdUser) VALUES (@IdStation, @IdUser)";
+                        using (SqlCommand command = new SqlCommand(commandText))
+                        {
+                            command.Connection = connection;
+                            command.Parameters.Add("@IdStation", SqlDbType.VarChar, 100).Value = Guid.NewGuid().ToString();
+                            command.Parameters.Add("@IdUser", SqlDbType.VarChar, 100).Value = user.Id;
+                            connection.Open();
+                            command.ExecuteNonQuery();
+                            connection.Close();
+                        }
+                    }
                     return RedirectToAction("Index");
                 }
                 else
@@ -41,6 +61,7 @@ namespace DynamicEquipmentSystem.Controllers
             }
             return View(model);
         }
+
 
         public async Task<IActionResult> Edit(string id)
         {

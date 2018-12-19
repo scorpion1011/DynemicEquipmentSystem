@@ -85,5 +85,31 @@ namespace DynamicEquipmentSystem.Controllers
             }
             return View(model);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(string id)
+        {
+            var user = await GetCurrentUserAsync();
+            var userId = user?.Id;
+
+            WebRequest request = WebRequest.Create(_configuration.GetValue<string>("BackendUrl") + "api/friends/" + id + "/" + userId);
+            request.Method = "Delete";
+            request.GetResponse();
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SubmitFriendRequest(string id)
+        {
+            var user = await GetCurrentUserAsync();
+            var userId = user?.Id;
+
+            WebRequest request = WebRequest.Create(_configuration.GetValue<string>("BackendUrl") + "api/friends/" + id + "/" + userId);
+            request.Method = "Put";
+            request.GetResponse();
+
+            return RedirectToAction("Index");
+        }
     }
 }

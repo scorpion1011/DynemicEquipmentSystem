@@ -1,0 +1,61 @@
+﻿@model IEnumerable<DynamicEquipmentSystem.Models.Mark>
+@{
+    ViewBag.Title = "Список маркерів";
+}
+<style>
+    a.button7 {
+        font-weight: 700;
+        color: white;
+        text-decoration: none;
+        padding: .8em 1em calc(.8em + 3px);
+        border-radius: 3px;
+        background: rgb(64,199,129);
+        box-shadow: 0 -3px rgb(53,167,110) inset;
+        transition: 0.2s;
+    }
+
+        a.button7:hover {
+            background: rgb(53, 167, 110);
+        }
+
+        a.button7:active {
+            background: rgb(33,147,90);
+            box-shadow: 0 3px rgb(33,147,90) inset;
+        }
+
+    .body-content {
+        margin-top: 20px;
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    .title {
+        /* чтобы линии не выходили за ширину блока заголовка */
+        overflow: hidden;
+    }
+</style>
+
+<a></a>
+<a class="button7" style="margin-right: 45px;" asp-action="AddMark">Додати маркер</a>
+<a></a>
+
+
+<table class="table" style="margin-top: 20px;">
+    <tr><th>Назва маркеру</th></tr>
+    @foreach (var mark in Model)
+    {
+        if (mark.IsActive == true)
+        {
+            <tr>
+                <td>@mark.Name</td>
+                <td>
+                    <form asp-action="Delete" asp-route-id="@mark.IdMark" method="post">
+                        <button type="submit" class="btn btn-sm btn-danger">
+                            Удалить
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        }
+    }
+</table>
