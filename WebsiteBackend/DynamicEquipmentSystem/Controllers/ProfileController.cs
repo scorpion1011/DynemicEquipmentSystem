@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using DynamicEquipmentSystem.Extentions;
 using DynamicEquipmentSystem.Models;
 using DynamicEquipmentSystem.ViewModels;
 using Microsoft.AspNetCore.Identity;
@@ -57,35 +58,22 @@ namespace DynamicEquipmentSystem.Controllers
                 User user = await _userManager.FindByIdAsync(model.Id);
                 if (user != null)
                 {
-                    var _passwordValidator =
-                       HttpContext.RequestServices.GetService(typeof(IPasswordValidator<User>)) as IPasswordValidator<User>;
-                    var _passwordHasher =
-                        HttpContext.RequestServices.GetService(typeof(IPasswordHasher<User>)) as IPasswordHasher<User>;
-                    IdentityResult result =
-                            await _passwordValidator.ValidateAsync(_userManager, user, model.Password);
-                    if (result.Succeeded)
+                    user.Email = model.Email;
+                    user.UserName = model.Email;
+                    user.Year = model.Year;
+                    if (model.Password != null)
                     {
-                        user.Email = model.Email;
-                        user.UserName = model.Email;
-                        user.Year = model.Year;
-                        user.PasswordHash = _passwordHasher.HashPassword(user, model.Password);
+                        await UpdatePassword(user, model.Password);
+                    }
 
-                        var result2 = await _userManager.UpdateAsync(user);
-                        if (result2.Succeeded)
-                        {
-                            return RedirectToAction("Index");
-                        }
-                        else
-                        {
-                            foreach (var error in result.Errors)
-                            {
-                                ModelState.AddModelError(string.Empty, error.Description);
-                            }
-                        }
+                    var result2 = await _userManager.UpdateAsync(user);
+                    if (result2.Succeeded)
+                    {
+                        return RedirectToAction("Index").WithSuccess("Profile is updated!"); ;
                     }
                     else
                     {
-                        foreach (var error in result.Errors)
+                        foreach (var error in result2.Errors)
                         {
                             ModelState.AddModelError(string.Empty, error.Description);
                         }
@@ -93,6 +81,24 @@ namespace DynamicEquipmentSystem.Controllers
                 }
             }
             return View("Index");
+        }
+
+        protected async Task<bool> UpdatePassword(User user, string password)
+        {
+            var _passwordValidator =
+               HttpContext.RequestServices.GetService(typeof(IPasswordValidator<User>)) as IPasswordValidator<User>;
+            var _passwordHasher =
+                HttpContext.RequestServices.GetService(typeof(IPasswordHasher<User>)) as IPasswordHasher<User>;
+            IdentityResult result =
+                    await _passwordValidator.ValidateAsync(_userManager, user, password);
+            if (result.Succeeded)
+            {
+                user.PasswordHash = _passwordHasher.HashPassword(user, password);
+
+                var result2 = await _userManager.UpdateAsync(user);
+                return result2.Succeeded;
+            }
+            return false;
         }
     }
 }

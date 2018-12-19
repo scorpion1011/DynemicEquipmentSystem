@@ -39,3 +39,7 @@ body {
         display: none;
     }
 }
+
+input[type="checkbox"] {
+    width: auto;
+}

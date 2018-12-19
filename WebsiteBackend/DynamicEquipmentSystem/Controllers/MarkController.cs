@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using DynamicEquipmentSystem.Models;
+using DynamicEquipmentSystem.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -50,16 +51,54 @@ namespace DynamicEquipmentSystem.Controllers
         public async Task<IActionResult> AddMark() => View(await GetMarkListAsync());
         
         [HttpPost]
-        public async Task<IActionResult> SetMarkOn(int id)
+        public IActionResult SetMarkOn(int id)
         {
-            var user = await GetCurrentUserAsync();
-            var userId = user?.Id;
-
-            WebRequest request = WebRequest.Create(_configuration.GetValue<string>("BackendUrl") + "api/mark/" + userId);
+            WebRequest request = WebRequest.Create(_configuration.GetValue<string>("BackendUrl") + "api/mark/" + id);
             request.Method = "Put";
             request.GetResponse();
 
             return RedirectToAction("Index");
         }
+
+        [HttpGet]
+        public IActionResult EditMark(int id)
+        {
+            Mark mark;
+            WebRequest request = WebRequest.Create(_configuration.GetValue<string>("BackendUrl") + "api/mark/info/" + id);
+            request.Method = "Get";
+            using (var s = request.GetResponse().GetResponseStream())
+            {
+                using (var sr = new StreamReader(s))
+                {
+                    var contributorsAsJson = sr.ReadToEnd();
+                    mark = JsonConvert.DeserializeObject<Mark>(contributorsAsJson);
+                }
+            }
+
+            MarkViewModel model = new MarkViewModel { Name = mark.Name, IsActive = mark.IsActive };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult UpdateMark(int id)
+        {
+            Mark mark;
+            WebRequest request = WebRequest.Create(_configuration.GetValue<string>("BackendUrl") + "api/mark/info/" + id);
+            request.Method = "Post";
+            using (var s = request.GetResponse().GetResponseStream())
+            {
+                using (var sr = new StreamReader(s))
+                {
+                    var contributorsAsJson = sr.ReadToEnd();
+                    mark = JsonConvert.DeserializeObject<Mark>(contributorsAsJson);
+                }
+            }
+
+            MarkViewModel model = new MarkViewModel { Name = mark.Name, IsActive = mark.IsActive };
+
+            return View(model);
+        }
+
     }
 }
