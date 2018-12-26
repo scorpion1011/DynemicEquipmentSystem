@@ -75,29 +75,19 @@ namespace DynamicEquipmentSystem.Controllers
                 }
             }
 
-            MarkViewModel model = new MarkViewModel { Name = mark.Name, IsActive = mark.IsActive };
+            MarkViewModel model = new MarkViewModel { IdMark = id, Name = mark.Name, IsActive = mark.IsActive };
 
             return View(model);
         }
 
         [HttpPost]
-        public IActionResult UpdateMark(int id)
+        public IActionResult UpdateMark(MarkViewModel model)
         {
-            Mark mark;
-            WebRequest request = WebRequest.Create(_configuration.GetValue<string>("BackendUrl") + "api/mark/info/" + id);
-            request.Method = "Post";
-            using (var s = request.GetResponse().GetResponseStream())
-            {
-                using (var sr = new StreamReader(s))
-                {
-                    var contributorsAsJson = sr.ReadToEnd();
-                    mark = JsonConvert.DeserializeObject<Mark>(contributorsAsJson);
-                }
-            }
+            WebRequest request = WebRequest.Create(_configuration.GetValue<string>("BackendUrl") + "api/mark/" + model.IdMark + "/" + model.Name + "/" + model.IsActive);
+            request.Method = "Put";
+            request.GetResponse();
 
-            MarkViewModel model = new MarkViewModel { Name = mark.Name, IsActive = mark.IsActive };
-
-            return View(model);
+            return RedirectToAction("Index");
         }
 
     }

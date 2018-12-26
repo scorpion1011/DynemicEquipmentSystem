@@ -93,35 +93,52 @@ namespace BackendEquipmentSystem.Controllers
         [HttpPut("{IdMark}")]
         public void UpdateMark(int IdMark)
         {
-
-            using (SqlConnection connection = new SqlConnection(connString))
-            {
-                var commandText = "UPDATE Mark SET IsActive = 'true' WHERE IdMark = @IdMark";
-                using (SqlCommand command = new SqlCommand(commandText))
+                using (SqlConnection connection = new SqlConnection(connString))
                 {
-                    command.Connection = connection;
-                    command.Parameters.Add("@IdMark", SqlDbType.Int, 100).Value = IdMark;
-                    connection.Open();
-                    command.ExecuteNonQuery();
-                    connection.Close();
+                    var commandText = "UPDATE Mark SET IsActive = 'true' WHERE IdMark = @IdMark";
+                    using (SqlCommand command = new SqlCommand(commandText))
+                    {
+                        command.Connection = connection;
+                        command.Parameters.Add("@IdMark", SqlDbType.Int, 100).Value = IdMark;
+                        connection.Open();
+                        command.ExecuteNonQuery();
+                        connection.Close();
+                    }
                 }
-            }
         }
 
-        [HttpDelete("{IdMark}")]
-        public void ChangeName(int IdMark)
+        [HttpPut("{IdMark}/{Name}/{IsActive}")]
+        public void UpdateMark(int IdMark, string Name, bool IsActive)
         {
-
-            using (SqlConnection connection = new SqlConnection(connString))
+            if (IsActive)
             {
-                var commandText = "DELETE Mark WHERE IdMark = @IdMark";
-                using (SqlCommand command = new SqlCommand(commandText))
+                using (SqlConnection connection = new SqlConnection(connString))
                 {
-                    command.Connection = connection;
-                    command.Parameters.Add("@IdMark", SqlDbType.Int, 100).Value = IdMark;
-                    connection.Open();
-                    command.ExecuteNonQuery();
-                    connection.Close();
+                    var commandText = "UPDATE Mark SET Name = @Name WHERE IdMark = @IdMark";
+                    using (SqlCommand command = new SqlCommand(commandText))
+                    {
+                        command.Connection = connection;
+                        command.Parameters.Add("@IdMark", SqlDbType.Int, 100).Value = IdMark;
+                        command.Parameters.Add("@Name", SqlDbType.VarChar, 100).Value = Name;
+                        connection.Open();
+                        command.ExecuteNonQuery();
+                        connection.Close();
+                    }
+                }
+            }
+            else
+            {
+                using (SqlConnection connection = new SqlConnection(connString))
+                {
+                    var commandText = "DELETE Mark WHERE IdMark = @IdMark";
+                    using (SqlCommand command = new SqlCommand(commandText))
+                    {
+                        command.Connection = connection;
+                        command.Parameters.Add("@IdMark", SqlDbType.Int, 100).Value = IdMark;
+                        connection.Open();
+                        command.ExecuteNonQuery();
+                        connection.Close();
+                    }
                 }
             }
         }
@@ -170,36 +187,40 @@ namespace BackendEquipmentSystem.Controllers
             return NoContent();
         }
 
-        [HttpPost("lost")]
+        [HttpDelete("lost")]
         public IActionResult Lost([FromBody] dynamic value)
         {
             using (SqlConnection connection = new SqlConnection(connString))
             {
-                var commandText = "SELECT IdMark FROM Mark WHERE IdMark = @IdMark and IsActive = 'true'";
+                var commandText = "SELECT IdMark, IsActive FROM Mark WHERE IdMark = @IdMark";
                 using (SqlCommand command = new SqlCommand(commandText))
                 {
                     command.Connection = connection;
                     command.Parameters.Add("@IdMark", SqlDbType.Int, 100).Value = Int32.Parse(value.mark.Value);
                     connection.Open();
-
+                    bool isActive;
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
                         if (reader.Read())
                         {
-                            using (SqlCommand command2 = new SqlCommand("UPDATE Mark SET IsGotten = 'false' WHERE IdMark = @IdMark"))
+                            isActive = reader.GetBoolean(1);
+                            if (isActive)
                             {
-                                command2.Connection = connection;
-                                command2.Parameters.Add("@IdMark", SqlDbType.Int, 100).Value = Int32.Parse(value.mark.Value);
-                                command2.ExecuteNonQuery();
+                                using (SqlCommand command2 = new SqlCommand("UPDATE Mark SET IsGotten = 'false' WHERE IdMark = @IdMark"))
+                                {
+                                    command2.Connection = connection;
+                                    command2.Parameters.Add("@IdMark", SqlDbType.Int, 100).Value = Int32.Parse(value.mark.Value);
+                                    command2.ExecuteNonQuery();
+                                }
                             }
-                        }
-                        else
-                        {
-                            using (SqlCommand command1 = new SqlCommand("DELETE FROM Mark where IdMark = @IdMark"))
+                            else
                             {
-                                command1.Connection = connection;
-                                command1.Parameters.Add("@IdMark", SqlDbType.Int, 100).Value = Int32.Parse(value.mark.Value);
-                                command1.ExecuteNonQuery();
+                                using (SqlCommand command1 = new SqlCommand("DELETE FROM Mark where IdMark = @IdMark"))
+                                {
+                                    command1.Connection = connection;
+                                    command1.Parameters.Add("@IdMark", SqlDbType.Int, 100).Value = Int32.Parse(value.mark.Value);
+                                    command1.ExecuteNonQuery();
+                                }
                             }
                         }
                     }

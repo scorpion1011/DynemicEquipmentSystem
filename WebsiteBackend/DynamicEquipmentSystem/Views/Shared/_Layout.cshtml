@@ -22,10 +22,10 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a href="#" class="todo">Lists</a></li>
+                    <li><a asp-area="" asp-controller="List" asp-action="Index">Lists</a></li>
                     <li><a asp-area="" asp-controller="Friend" asp-action="Index">Friends</a></li>
                     <li><a asp-area="" asp-controller="Mark" asp-action="Index">Marks</a></li>
-                    <li><a href="#" class="todo">Station</a></li>
+                    <li><a asp-area="" asp-controller="Station" asp-action="Index">Station</a></li>
                     @if (this.User.IsInRole("admin"))
                     {
                         <li><a asp-area="" asp-controller="Users" asp-action="Index">Users</a></li>
