@@ -20,4 +20,11 @@
     <string name="validation_link">Please click on the link sent over the mail to you to validate your Account.</string>
     <string name="reset_password_info">Please enter your registered Email Id for password reset instructions</string>
     <string name="skip"></string>
+    <string name="title_activity_my_lists">My Lists</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">My Lists</string>
+    <string name="nav_header_subtitle"></string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
 </resources>

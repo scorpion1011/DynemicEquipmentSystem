@@ -7,6 +7,7 @@ import com.facebook.FacebookSdk;
 import com.facebook.LoggingBehavior;
 import com.moldedbits.argus.Argus;
 import com.moldedbits.argus.ArgusTheme;
+import com.moldedbits.argus.MyListsActivity;
 import com.moldedbits.argus.nextscreenproviders.SimpleNextScreenProvider;
 import com.moldedbits.argus.provider.BaseProvider;
 import com.moldedbits.argus.provider.login.EmailLoginProvider;
@@ -79,7 +80,7 @@ public class EmailSocialLoginApplication extends Application {
 
         new Argus.Builder()
                 .argusStorage(new DefaultArgusStorage(getApplicationContext()))
-                .nextScreenProvider(new SimpleNextScreenProvider(HomeActivity.class))
+                .nextScreenProvider(new SimpleNextScreenProvider(MyListsActivity.class))
                 .enableSkipLogin(false)
                 .skipLoginText(getString(R.string.skip_login))
 //                .signupProviders(signupProviders)
