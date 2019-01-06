@@ -44,7 +44,7 @@ public class EmailSocialLoginApplication extends Application {
 //        FacebookOnBoardingProvider facebookProvider = new FacebookSignupProvider();
 
         //setting permissions required by facebook to get specific data
-//        List<String> permissionList = new ArrayList<>();
+//        MyList<String> permissionList = new ArrayList<>();
 //        permissionList.add(FacebookConfig.PUBLIC_PROFILE);
 //        permissionList.add(FacebookConfig.EMAIL);
 //        facebookProvider.setFacebookPermission(permissionList);
