@@ -2,23 +2,24 @@ package com.moldedbits.argus;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import java.util.Timer;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class MyListsActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    Thread myCurrentThread = new Thread();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,16 +95,42 @@ public class MyListsActivity extends AppCompatActivity
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-
-        RecyclerView recList = (RecyclerView) findViewById(R.id.thingsList);
+    public boolean onNavigationItemSelected(final MenuItem item) {
+        stopThread();
+        final RecyclerView recList = (RecyclerView) findViewById(R.id.thingsList);
         recList.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recList.setLayoutManager(llm);
 
-        ThingAdapter ca = new ThingAdapter(createList((int) (Math.random()*8 + 1), item.getTitle()));
-        recList.setAdapter(ca);
+        //ThingAdapter ca = new ThingAdapter(createList((int) (Math.random()*8 + 1), item.getTitle()));
+        //recList.setAdapter(ca);
+//        Timer mTimer = new Timer();
+//        MyTimerTask mMyTimerTask = new MyTimerTask(recList, item);
+//        mTimer.schedule(mMyTimerTask, 1000, 5000);
+
+        myCurrentThread = new Thread() {
+            public void run() {
+                int i = 0;
+                while (!Thread.currentThread().isInterrupted()) {
+                    try {
+                        runOnUiThread(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                ThingAdapter ca = new ThingAdapter(createList((int) (Math.random() * 8 + 1), item.getTitle()));
+                                recList.setAdapter(ca);
+                            }
+                        });
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        break;
+                    }
+                }
+            }
+        };
+
+        myCurrentThread.start();//runThread(recList, item);
 
         // Handle navigation view item clicks here.
         int id = item.getItemId();
@@ -132,6 +159,29 @@ public class MyListsActivity extends AppCompatActivity
         return lists;
     }
 
+    private void runThread(final RecyclerView recList, final MenuItem item) {
+        new Thread() {
+            public void run() {
+                int i = 0;
+                while (!isInterrupted()) {
+                    try {
+                        runOnUiThread(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                ThingAdapter ca = new ThingAdapter(createList((int) (Math.random() * 8 + 1), item.getTitle()));
+                                recList.setAdapter(ca);
+                            }
+                        });
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }.start();
+    }
+
     private List<ThingInfo> createList(int size, CharSequence title) {
 
         List<ThingInfo> result = new ArrayList<ThingInfo>();
@@ -147,4 +197,44 @@ public class MyListsActivity extends AppCompatActivity
         return result;
     }
 
+    public void stopThread() {
+        if(myCurrentThread != null){
+            myCurrentThread.interrupt();
+        }
+    }
 }
+
+//class MyTimerTask extends TimerTask {
+//    RecyclerView _recList;
+//    MenuItem _item;
+//
+//    public MyTimerTask(RecyclerView recList, MenuItem item) {
+//        _recList = recList;
+//        _item = item;
+//    }
+//
+//    @Override
+//    public void run() {
+//        MyListsActivity.this.runOnUiThread(new Runnable() {
+//            public void run() {
+//                ThingAdapter ca = new ThingAdapter(createList((int) (Math.random() * 8 + 1), _item.getTitle()));
+//                _recList.setAdapter(ca);
+//            }
+//        });
+//    }
+//
+//    private List<ThingInfo> createList(int size, CharSequence title) {
+//
+//        List<ThingInfo> result = new ArrayList<ThingInfo>();
+//        for (int i=1; i <= size; i++) {
+//            ThingInfo ci = new ThingInfo();
+//            ci.name = "ThingInfo #" + i + " " + title;
+//            ci.presence = ((int) (Math.random()*2 + 1)) % 2 == 0;
+//            ci.id = i + 1;
+//
+//            result.add(ci);
+//        }
+//
+//        return result;
+//    }
+//}
