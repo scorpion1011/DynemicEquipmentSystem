@@ -3,6 +3,7 @@ package com.moldedbits.argus;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.moldedbits.argus.listener.ResultListener;
@@ -14,8 +15,7 @@ import retrofit2.Response;
 public class ArgusActivity extends AppCompatActivity
         implements ResultListener {
 
-    private ApiInterface apiInterface;
-    private User user;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,26 +25,6 @@ public class ArgusActivity extends AppCompatActivity
             throw new RuntimeException("Argus not initialized");
         }
 
-
-        apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
-
-        Call<User> call = apiInterface.getUser("alex.kom@gmail.com", "12345");
-
-        call.enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-
-                user = response.body();
-                String id = user.getIdUser();
-                int i = 0;
-            }
-
-            @Override
-            public void onFailure(Call<User> call, Throwable t) {
-                String message = t.getMessage();
-                int i = 0;
-            }
-        });
 
         // If user is logged in, proceed to next screen
         if (Argus.getInstance().getState() == ArgusState.SIGNED_IN) {
