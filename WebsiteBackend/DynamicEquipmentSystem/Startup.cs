@@ -51,7 +51,7 @@ namespace DynamicEquipmentSystem
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseAuthentication();
             app.UseMvc(routes =>
