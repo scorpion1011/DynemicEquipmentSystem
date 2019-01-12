@@ -1,0 +1,104 @@
+﻿@model IEnumerable<DynamicEquipmentSystem.Models.List>
+@{
+    ViewBag.Title = "Списки";
+}
+<style>
+    a.button7 {
+        font-weight: 700;
+        color: white;
+        text-decoration: none;
+        padding: .8em 1em calc(.8em + 3px);
+        border-radius: 3px;
+        background: rgb(64,199,129);
+        box-shadow: 0 -3px rgb(53,167,110) inset;
+        transition: 0.2s;
+    }
+
+        a.button7:hover {
+            background: rgb(53, 167, 110);
+        }
+
+        a.button7:active {
+            background: rgb(33,147,90);
+            box-shadow: 0 3px rgb(33,147,90) inset;
+        }
+
+    .body-content {
+        margin-top: 20px;
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    .title {
+        /* чтобы линии не выходили за ширину блока заголовка */
+        overflow: hidden;
+    }
+
+        .title:before,
+        .title:after {
+            content: '';
+            /* делаем линию строчно-блочной */
+            display: inline-block;
+            /* выравниваем вертикально по середине */
+            vertical-align: middle;
+            /* не позволяем ширине превысить 100% (будет добавлен бордюр) */
+            box-sizing: border-box;
+            /* установка ширины в 100% делает линию равной ширине тега заголовка
+    ** благодаря этому линия заполнит все свободное пространство
+    ** слева и справа от текста
+    */
+            width: 100%;
+            height: 3px;
+            background: #6CBD83;
+            /* добавляем к линии левый и правый бордюр цветом основного фона заголовка
+    ** благодаря этому создается нужный отступ между линиями и текстом
+    */
+            border: solid #FFF;
+            border-width: 0 10px;
+        }
+
+        .title:before {
+            /* смещаем левую линию влево отрицательным отступом, равным 100% ширины
+    ** благодаря этому линия встает слева от текста
+    */
+            margin-left: -100%;
+        }
+
+        .title:after {
+            /* смещаем правую линию вправо отрицательным отступом, равным 100% ширины
+    ** благодаря этому линия встает справа от текста
+    */
+            margin-right: -100%;
+        }
+
+    form {
+        text-align: right;
+    }
+</style>
+
+
+
+<a></a>
+<a class="button7" style="margin-right: 45px;" asp-action="AddList">Додати Список</a>
+<a></a>
+
+<div class="title title--center" style="margin-top: 20px; text-align: center; font-weight: bold; font-size: 20px">
+    Ваші списки:
+</div>
+
+<table class="table" style="margin-top: 20px;">
+    <tr><th>Name</th></tr>
+    @foreach (var list in Model)
+    {
+        <tr>
+            <td>@list.Name</td>
+            <td>
+                <form asp-action="DeleteList" asp-route-id="@list.IdList" method="post">
+                    <button type="submit" class="btn btn-sm btn-danger">
+                        Видалити список
+                    </button>
+                </form>
+            </td>
+        </tr>
+    }
+</table>

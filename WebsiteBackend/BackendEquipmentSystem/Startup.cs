@@ -45,7 +45,7 @@ namespace BackendEquipmentSystem
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseMvc();
         }
     }
