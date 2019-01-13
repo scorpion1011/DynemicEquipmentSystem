@@ -1,5 +1,7 @@
 package com.moldedbits.argus;
 
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
@@ -12,5 +14,17 @@ public interface ApiInterface {
     Call<User> getUser(
             @Path("email") String email,
             @Path("password") String password
+    );
+
+    @Headers("Content-Type:application/json")
+    @GET("list/{idUser}")
+    Call<List<MyList>> getList(
+            @Path("idUser") String idUser
+    );
+
+    @Headers("Content-Type:application/json")
+    @GET("thing/{idList}")
+    Call<List<ThingInfo>> getThing(
+            @Path("idList") int idList
     );
 }

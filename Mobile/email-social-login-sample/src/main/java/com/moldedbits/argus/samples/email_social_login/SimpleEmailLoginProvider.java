@@ -56,7 +56,7 @@ public class SimpleEmailLoginProvider extends com.moldedbits.argus.provider.logi
                 }
                 else {
                     if (resultListener != null) {
-                        resultListener.onSuccess(ArgusState.SIGNED_IN);
+                        resultListener.onSuccess(ArgusState.SIGNED_IN, id);
                     }
                 }
             }

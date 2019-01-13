@@ -85,6 +85,14 @@ public class Argus {
         argusSessionManager.setCurrentState(argusState);
     }
 
+    public String getUserId() {
+        return argusSessionManager.getUserID();
+    }
+
+    public void setUserId(String userId) {
+        argusSessionManager.setUserId(userId);
+    }
+
     public ArgusStorage getStorage() {
         return argusStorage;
     }

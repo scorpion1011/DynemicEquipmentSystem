@@ -26,31 +26,6 @@ namespace BackendEquipmentSystem.Controllers
         public dynamic GetUserId(string Email, string Password)
         {
             string userId = "";
-            //var _passwordHasher =
-            //    HttpContext.RequestServices.GetService(typeof(IPasswordHasher<User>)) as IPasswordHasher<User>;
-            //User user = new User();
-
-            //using (SqlConnection connection = new SqlConnection(connString))
-            //{
-            //    var commandText = "select Id from AspNetUsers where Email = @email and PasswordHash = @ph";
-            //    using (SqlCommand command = new SqlCommand(commandText))
-            //    {
-            //        command.Connection = connection;
-            //        command.Parameters.Add("@email", System.Data.SqlDbType.NVarChar, 256).Value = Email;
-            //        command.Parameters.Add("@ph", System.Data.SqlDbType.NVarChar, 512).Value = MyHashPassword(Password);
-            //        connection.Open();
-
-            //        using (SqlDataReader reader = command.ExecuteReader())
-            //        {
-            //            if (reader.Read())
-            //            {
-            //                userId = reader.GetString(0);
-            //            }
-            //        }
-
-            //        connection.Close();
-            //    }
-            //}
             string userHash = "";
             using (SqlConnection connection = new SqlConnection(connString))
             {

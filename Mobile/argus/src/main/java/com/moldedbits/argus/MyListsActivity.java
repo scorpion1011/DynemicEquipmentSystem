@@ -12,13 +12,20 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class MyListsActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
+    private static Menu menu;
+    private ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
     Thread myCurrentThread = new Thread();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,15 +54,30 @@ public class MyListsActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        Menu menu = navigationView.getMenu();
+        menu = navigationView.getMenu();
         menu.clear();
 
-        for (MyList list:getLists()) {
-            menu.add(Menu.NONE, list.id, Menu.NONE, list.name);
-        }
+        Call<List<MyList>> call = apiInterface.getList(Argus.getInstance().getUserId());
 
-        onNavigationItemSelected(menu.getItem(0));
+        call.enqueue(new Callback<List<MyList>>() {
+            @Override
+            public void onResponse(Call<List<MyList>> call, Response<List<MyList>> response) {
 
+                List<MyList> checkLists = response.body();
+
+                if (checkLists != null) {
+                    for (final MyList list : checkLists) {
+                        menu.add(Menu.NONE, list.getIdList(), Menu.NONE, list.getListName());
+                    }
+                    onNavigationItemSelected(menu.getItem(0));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<MyList>> call, Throwable t) {
+                String message = t.getMessage();
+            }
+        });
 
     }
 
@@ -111,15 +133,31 @@ public class MyListsActivity extends AppCompatActivity
 
         myCurrentThread = new Thread() {
             public void run() {
-                int i = 0;
                 while (!Thread.currentThread().isInterrupted()) {
                     try {
                         runOnUiThread(new Runnable() {
 
                             @Override
                             public void run() {
-                                ThingAdapter ca = new ThingAdapter(createList((int) (Math.random() * 8 + 1), item.getTitle()));
-                                recList.setAdapter(ca);
+                                Call<List<ThingInfo>> call = apiInterface.getThing(item.getItemId());
+
+                                call.enqueue(new Callback<List<ThingInfo>>() {
+                                    @Override
+                                    public void onResponse(Call<List<ThingInfo>> call, Response<List<ThingInfo>> response) {
+
+                                        List<ThingInfo> checkThingInfo = response.body();
+
+                                        if (checkThingInfo != null) {
+                                            ThingAdapter ca = new ThingAdapter(checkThingInfo);
+                                            recList.setAdapter(ca);
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<List<ThingInfo>> call, Throwable t) {
+                                        String message = t.getMessage();
+                                    }
+                                });
                             }
                         });
                         Thread.sleep(1000);
@@ -133,9 +171,9 @@ public class MyListsActivity extends AppCompatActivity
         myCurrentThread.start();//runThread(recList, item);
 
         // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        setTitle(getResources().getText(R.string.title_activity_my_lists).toString() + ": " + item.getTitle());
+//        int id = item.getItemId();
+//
+//        setTitle(getResources().getText(R.string.title_activity_my_lists).toString() + ": " + item.getTitle());
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -147,55 +185,19 @@ public class MyListsActivity extends AppCompatActivity
         Intent intent = new Intent(this, ArgusActivity.class);
         startActivity(intent);
     }
-
-    protected List<MyList> getLists()
-    {
-        List<MyList> lists = new ArrayList<MyList>();
-
-        lists.add(new MyList(123, "List1"));
-        lists.add(new MyList(124, "List2"));
-        lists.add(new MyList(125, "List3"));
-
-        return lists;
-    }
-
-    private void runThread(final RecyclerView recList, final MenuItem item) {
-        new Thread() {
-            public void run() {
-                int i = 0;
-                while (!isInterrupted()) {
-                    try {
-                        runOnUiThread(new Runnable() {
-
-                            @Override
-                            public void run() {
-                                ThingAdapter ca = new ThingAdapter(createList((int) (Math.random() * 8 + 1), item.getTitle()));
-                                recList.setAdapter(ca);
-                            }
-                        });
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }.start();
-    }
-
-    private List<ThingInfo> createList(int size, CharSequence title) {
-
-        List<ThingInfo> result = new ArrayList<ThingInfo>();
-        for (int i=1; i <= size; i++) {
-            ThingInfo ci = new ThingInfo();
-            ci.name = "ThingInfo #" + i + " " + title;
-            ci.presence = ((int) (Math.random()*2 + 1)) % 2 == 0;
-            ci.id = i + 1;
-
-            result.add(ci);
-        }
-
-        return result;
-    }
+//
+//    private List<ThingInfo> createList(List<ThingInfo> things) {
+//        for (int i=1; i <= things.size(); i++) {
+//            ThingInfo ci = new ThingInfo();
+//            ci.setThingName("ThingInfo #" + i + " " + title);
+//            ci.setPresence(((int) (Math.random()*2 + 1)) % 2 == 0);
+//            ci.setIdThing(i + 1);
+//
+//            result.add(ci);
+//        }
+//
+//        return result;
+//    }
 
     public void stopThread() {
         if(myCurrentThread != null){

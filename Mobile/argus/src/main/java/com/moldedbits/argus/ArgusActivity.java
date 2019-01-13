@@ -52,6 +52,15 @@ public class ArgusActivity extends AppCompatActivity
     }
 
     @Override
+    public void onSuccess(ArgusState argusState, String userId) {
+        Argus.getInstance().setState(argusState);
+        Argus.getInstance().setUserId(userId);
+        if (argusState == ArgusState.SIGNED_IN) {
+            showNextScreen();
+        }
+    }
+
+    @Override
     public void onSuccess(ArgusState argusState) {
         Argus.getInstance().setState(argusState);
         if (argusState == ArgusState.SIGNED_IN) {

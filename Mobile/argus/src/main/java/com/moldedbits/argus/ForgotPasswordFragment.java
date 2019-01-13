@@ -42,6 +42,11 @@ public class ForgotPasswordFragment extends Fragment implements ResultListener {
         resultListener.onSuccess(argusState);
     }
 
+    public void onSuccess(ArgusState argusState, String id) {
+        onSuccess(argusState);
+    }
+
+
     @Override
     public void onFailure(String message) {
         resultListener.onFailure(message);

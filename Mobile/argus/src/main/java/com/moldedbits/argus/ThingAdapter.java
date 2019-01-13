@@ -26,8 +26,8 @@ public class ThingAdapter extends RecyclerView.Adapter<ThingAdapter.ThingViewHol
     @Override
     public void onBindViewHolder(ThingViewHolder thingViewHolder, int i) {
         ThingInfo ci = contactList.get(i);
-        thingViewHolder.vName.setText(ci.name);
-        if(ci.presence) {
+        thingViewHolder.vName.setText(ci.getThingName());
+        if(ci.getPresence()) {
             thingViewHolder.vPresenceON.setVisibility(View.VISIBLE);
             thingViewHolder.vPresenceOFF.setVisibility(View.INVISIBLE);
         }
