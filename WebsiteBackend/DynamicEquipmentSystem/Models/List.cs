@@ -10,5 +10,6 @@ namespace DynamicEquipmentSystem.Models
         public int IdList { get; set; }
         public string Name { get; set; }
         public bool isActive { get; set; }
+        public string idOwner { get; set; }
     }
 }

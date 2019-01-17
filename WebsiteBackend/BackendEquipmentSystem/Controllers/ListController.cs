@@ -26,7 +26,7 @@ namespace BackendEquipmentSystem.Controllers
 
             using (SqlConnection connection = new SqlConnection(connString))
             {
-                var commandText = "select l.IdList, l.Name, l.isActive from List as l, Owners as o where l.IdList = o.IdList and o.IdUser = @sender";
+                var commandText = "select l.IdList, l.Name, l.isActive, l.idOwner from List as l, Owners as o where l.IdList = o.IdList and o.IdUser = @sender";
                 using (SqlCommand command = new SqlCommand(commandText))
                 {
                     command.Connection = connection;
@@ -41,7 +41,8 @@ namespace BackendEquipmentSystem.Controllers
                             {
                                 IdList = reader.GetInt32(0),
                                 Name = reader.GetString(1),
-                                isActive = reader.GetBoolean(2)
+                                isActive = reader.GetBoolean(2),
+                                idOwner = reader.GetString(3)
                             });
                         }
                     }
@@ -59,11 +60,12 @@ namespace BackendEquipmentSystem.Controllers
             int newId;
             using (SqlConnection connection = new SqlConnection(connString))
             {
-                var commandText = "INSERT INTO List (Name, isActive) VALUES (@name, 'true') SELECT @@IDENTITY";
+                var commandText = "INSERT INTO List (Name, isActive, idOwner) VALUES (@name, 'true', @userId) SELECT @@IDENTITY";
                 using (SqlCommand command = new SqlCommand(commandText))
                 {
                     command.Connection = connection;
                     command.Parameters.Add("@name", SqlDbType.VarChar, 100).Value = name;
+                    command.Parameters.Add("@userId", SqlDbType.VarChar, 100).Value = senderId;
                     connection.Open();
                     newId = Convert.ToInt32(command.ExecuteScalar());
                 }

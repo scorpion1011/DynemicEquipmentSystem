@@ -1,5 +1,4 @@
-﻿@model IEnumerable<DynamicEquipmentSystem.Models.List>
-@{
+﻿@{
     ViewBag.Title = "Списки";
 }
 <style>
@@ -87,11 +86,22 @@
 </div>
 
 <table class="table" style="margin-top: 20px;">
-    <tr><th>Name</th></tr>
-    @foreach (var list in Model)
+    <tr><th>Name</th><th></th><th></th></tr>
+    @foreach (var list in ViewBag.UsersLists)
     {
         <tr>
             <td>@list.Name</td>
+
+            <td>
+                @if (list.idOwner == ViewBag.UserId)
+                {
+                    <form asp-action="Owners" asp-route-id="@list.IdList" method="post">
+                        <button type="submit" class="btn btn-sm btn-danger">
+                            Редагувати список власників
+                        </button>
+                    </form>
+                }
+            </td>
             <td>
                 <form asp-action="DeleteList" asp-route-id="@list.IdList" method="post">
                     <button type="submit" class="btn btn-sm btn-danger">

@@ -17,6 +17,7 @@ namespace DynamicEquipmentSystem.Controllers
     {
         UserManager<User> _userManager;
         IConfiguration _configuration;
+        static int lastClickedListId;
 
         public ListController(IConfiguration configuration, UserManager<User> userManager)
         {
@@ -46,7 +47,15 @@ namespace DynamicEquipmentSystem.Controllers
             return lists;
         }
 
-        public async Task<IActionResult> Index() => View(await GetUsersListsAsync());
+        public async Task<IActionResult> Index()
+        {
+            var user = await GetCurrentUserAsync();
+            var userId = user?.Id;
+
+            ViewBag.UsersLists = await GetUsersListsAsync();
+            ViewBag.UserId = userId;
+            return View();
+        }
 
         public IActionResult AddList() => View();
 
@@ -75,6 +84,60 @@ namespace DynamicEquipmentSystem.Controllers
             request.GetResponse();
 
             return RedirectToAction("Index");
+        }
+
+        public IActionResult Owners() => View();
+
+        [HttpPost]
+        public IActionResult Owners(int id)
+        {
+            lastClickedListId = id;
+            ListOfFriendsOwnersViewModel model = new ListOfFriendsOwnersViewModel();
+            List<FriendOwnerModelView> models;
+            WebRequest request = WebRequest.Create(_configuration.GetValue<string>("BackendUrl") + "api/owners/" + id);
+            request.Method = "Get";
+
+            using (var s = request.GetResponse().GetResponseStream())
+            {
+                using (var sr = new StreamReader(s))
+                {
+                    var contributorsAsJson = sr.ReadToEnd();
+                    models = JsonConvert.DeserializeObject<List<FriendOwnerModelView>>(contributorsAsJson);
+                }
+            }
+            foreach (var m in models)
+            {
+                model.List.Add(m);
+            }
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> OwnersAsync(List<string> ownersId)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await GetCurrentUserAsync();
+                var userId = user?.Id;
+                WebRequest request = WebRequest.Create(_configuration.GetValue<string>("BackendUrl") + "api/owners/" + lastClickedListId);
+                request.Method = "Delete";
+                request.GetResponse();
+
+                request = WebRequest.Create(_configuration.GetValue<string>("BackendUrl") + "api/owners/" + lastClickedListId + "/" + userId);
+                request.Method = "Post";
+                request.GetResponse();
+
+                foreach (string ownerId in ownersId)
+                {
+                    request = WebRequest.Create(_configuration.GetValue<string>("BackendUrl") + "api/owners/" + lastClickedListId + "/" + ownerId);
+                    request.Method = "Post";
+                    request.GetResponse();
+                }
+
+                return RedirectToAction("Index");
+            }
+            return NotFound();
         }
     }
 }
